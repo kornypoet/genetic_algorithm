@@ -1,6 +1,6 @@
 h1.  Genetic Algorithm - Binary Encoded Example
 
-The following example is a Ruby interpretation based on the idea illustrated "here."http://www.ai-junkie.com/ga/intro/gat1.html
+The following example is a Ruby interpretation based on the idea illustrated "here.":http://www.ai-junkie.com/ga/intro/gat1.html
 
 h2.  The Premise
 
@@ -15,8 +15,8 @@ chromosome is produced that matches the predetermined target.
 h2. Getting Started
 
 Download the code
-<pre><code>
-git clone git@github.com:kornypoet/genetic_algorithm.git
+
+<pre><code>git clone git@github.com:kornypoet/genetic_algorithm.git
 </code></pre>
 
 h3. Chromosomes
