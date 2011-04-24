@@ -1,31 +1,33 @@
 h1.  Genetic Algorithm - Binary Encoded Example
 
-h2. Getting Started
-
-Download the code
-
-<code>git clone git@github.com:kornypoet/genetic_algorithm.git<code/>
+The following example is a Ruby interpretation based on the idea illustrated "here."http://www.ai-junkie.com/ga/intro/gat1.html
 
 h2.  The Premise
 
-In this example, we will illustrate the effectiviness of genetic algorithms by simulating a population of chromosomes. Each generation, the chromosomes will be assessed and given a fitness score. The closer a given
-chromosome is to a predetermined target, the higher the fitness score. Then, by roulette wheel selection,
-2 parent chromosomes will be chosen. Chromosomes with a higher fitness score are more likely to be selected.
-These parent chromosomes will produce 2 offspring chromosomes, with each offspring carrying certain combined
-traits of their parents, based on a crossover rate. Each offspring may also undergo a genetic mutation, also
-based on a fixed rate. This process of roulette wheel selection, crossover, and possible mutation is repeated
-until a new generation of chromosomes is created. This population of chromosomes is assessed for fitness and
-then the entire process is repeated until a chromosome is produced that matches the predetermined target.
-     
+In this example, we will illustrate the effectiviness of genetic algorithms by simulating a population of chromosomes. Each generation, the chromosomes
+will be assessed and given a fitness score. The closer a given chromosome is to a predetermined target, the higher the fitness score. Then, by roulette
+wheel selection, 2 parent chromosomes will be chosen. Chromosomes with a higher fitness score are more likely to be selected. These parent chromosomes
+will produce 2 offspring chromosomes, with each offspring carrying certain combined traits of their parents, based on a crossover rate. Each offspring
+may also undergo a genetic mutation, also based on a fixed rate. This process of roulette wheel selection, crossover, and possible mutation is repeated
+until a new generation of chromosomes is created. This population of chromosomes is assessed for fitness and then the entire process is repeated until a
+chromosome is produced that matches the predetermined target.
+
+h2. Getting Started
+
+Download the code
+<pre><code>
+git clone git@github.com:kornypoet/genetic_algorithm.git
+</code></pre>
+
 h3. Chromosomes
 
-For most testing purposes this string shall be used:
+For most testing purposes the following string was used:
 
 @"1010011011001000111110100010101110"@
 
 Broken up into its constituent genes with corresponding decoded value
 
-@1010 0110 1100 1000 1111 1010 0010 1011 101@
-@+    6    *    8    nil  +    2    -    drop@
+@'1010'@ @'0110'@ @'1100'@ @'1000'@ @'1111'@ @'1010'@ @'0010'@ @'1011'@ @'101'@
+@'+'@    @'6'@    @'*'@    @'8'@    @nil@    @'+'@    @'2'@    @'-'@    @drop@
 
 
