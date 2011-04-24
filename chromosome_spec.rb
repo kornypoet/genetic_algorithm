@@ -1,5 +1,9 @@
 require 'chromosome'
 
+def test_bits
+  '10100110110010001111101000101011101'
+end
+
 describe Chromosome do
   before :each do
     @test_chrome = Chromosome.new test_bits
@@ -72,9 +76,3 @@ describe Chromosome do
 
 end
 
-# test_bits split into genes and decoded:
-# 1010 0110 1100 1000 1111 1010 0010 1011 101
-# +    6    *    8    nil  +    2    -    drop
-def test_bits
-  '10100110110010001111101000101011101'
-end
