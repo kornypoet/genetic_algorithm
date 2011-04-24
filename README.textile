@@ -1,2 +1,23 @@
 h1.  Genetic Algorithm - Binary Encoded Example
 
+h2. Getting Started
+
+Download the code
+
+@git clone git@github.com:kornypoet/genetic_algorithm.git@
+
+h2.  The Premise
+
+In this example, we will illustrate the effectiviness of genetic algorithms by simulating a population of
+chromosomes. Each generation, the chromosomes will be assessed and given a fitness score. The closer a given
+chromosome is to a predetermined target, the higher the fitness score. Then, by roulette wheel selection,
+2 parent chromosomes will be chosen. Chromosomes with a higher fitness score are more likely to be selected.
+These parent chromosomes will produce 2 offspring chromosomes, with each offspring carrying certain combined
+traits of their parents, based on a crossover rate. Each offspring may also undergo a genetic mutation, also
+based on a fixed rate. This process of roulette wheel selection, crossover, and possible mutation is repeated
+until a new generation of chromosomes is created. This population of chromosomes is assessed for fitness and
+then the entire process is repeated until a chromosome is produced that matches the predetermined target.
+
+h3. Chromosomes
+
+
