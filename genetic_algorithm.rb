@@ -2,24 +2,31 @@ require 'chromosome'
 
 class GeneticAlgorithm
 
-  attr_accessor :chromosomes, :target, :max_generations, :crossover_rate, :mutation_rate
+  attr_reader :chrome_length, :target, :pop_size, :chromosomes
 
   Infinity = 1.0 / 0
 
   def initialize( options = {} )
-    @target = options['target']
-    @max_generations = options['max_generations']
-    @chromosomes = []
-    options['pop_size'].times do |n|
-      chrome = Chromosome.new random_bits(options['chrome_length'])
-      @chromosomes.push chrome
-    end
+    raise "Target needs to be a Float" unless options['target'].instance_of? Float
+    @target        = options['target']
+    @pop_size      = options['pop_size']
+    @chrome_length = options['chrome_length']
+    @chromosomes   = populate @pop_size, @chrome_length
+    @total_fitness = total_fitness
   end
 
-  def random_bits length
-    chromosome = ''
-    length.times { |n| chromosome += rand(2).to_s }
-    chromosome
+  def random_gen length
+    bin_string = (1..length).inject("") { |str, foo| str += rand(2).to_s }
+  end
+
+  def populate size, length
+    population = []
+    size.times { population.push Chromosome.new(random_gen length) }
+    population
+  end
+
+  def mutate bin_string
+    bin_string = bin_string.gsub(/1/,'a').gsub(/0/,'1').gsub(/a/,'0')
   end
 
   def crossover(x_chrome, y_chrome)
@@ -29,8 +36,19 @@ class GeneticAlgorithm
     [crossed_x, crossed_y]
   end
 
-  def mutate! chromosome
-    chromosome.bit_value = chromosome.bit_value.gsub(/1/,'a').gsub(/0/,'1').gsub(/a/,'0')
+  def calculate_fitness actual, target
+    fitness = (100.0 / (target - actual)).abs
+    fitness >= 100 ? 99.0 : ("%.4f" % fitness).to_f
+  end
+
+  def update_fitness! target
+    @chromosomes.each { |chrome| chrome.fitness = calculate_fitness(chrome.numeric_value, target) }
+  end
+
+  def total_fitness
+    total_fitness = 0.0
+    @chromosomes.each { |chrome| total_fitness += chrome.fitness }
+    total_fitness
   end
 
   def roulette total_fitness
@@ -76,5 +94,3 @@ class GeneticAlgorithm
 
 end
 
-ga = GeneticAlgorithm.new({'pop_size'=> 100, 'chrome_length' => 100, 'target' => 56, 'max_generations' => 100 })
-ga.start!
