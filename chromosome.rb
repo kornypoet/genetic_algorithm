@@ -21,10 +21,10 @@ class Chromosome
 
   def initialize bits
     raise "Bit string must be binary encoded" if bits.match(/[^01]/)
-    @bit_value = bits
-    @string_value = correct(decode @bit_value)
+    @bit_value     = bits
+    @string_value  = correct(decode @bit_value)
     @numeric_value = compute @string_value
-    @fitness = 0.0
+    @fitness       = 0.0
   end
 
   def decode bits
@@ -50,6 +50,7 @@ class Chromosome
   end
 
   def compute numeric_string
+    return 0.0 if numeric_string.empty?
     value = eval numeric_string
     ("%.4f" % value).to_f
   end
@@ -64,3 +65,4 @@ class Chromosome
   end
 
 end
+

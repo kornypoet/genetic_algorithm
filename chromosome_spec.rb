@@ -45,10 +45,12 @@ describe Chromosome do
     test_val_two   = "4.0+6.0/9.0"
     test_val_three = "5.0-0.0/0.0"
     test_val_four  = "5.0/0.0+2.0"
+    test_val_five  = ""
     @test_chrome.compute(test_val_one).should   == 50.0
     @test_chrome.compute(test_val_two).should   == 4.6667
     @test_chrome.compute(test_val_three).should == 0.0
     @test_chrome.compute(test_val_four).should  == 0.0
+    @test_chrome.compute(test_val_five).should  == 0.0
   end
 
   it "should be able to display its numeric value" do
