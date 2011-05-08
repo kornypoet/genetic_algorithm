@@ -149,6 +149,12 @@ describe GeneticAlgorithm do
     test_range.should include percentage
   end
 
+  it "should be able to produce two children from two parents" do
+    @test_ga.update_fitness! @test_ga.target
+    p_one, p_two = @test_ga.roulette, @test_ga.roulette
+    c_one, c_two = @test_ga.create_children(p_one, p_two)
+  end
+
   it "should be able to replace the current population with a new generation" do
     test_pop = ['1111', '0000', '1111', '0000']
     @test_ga.new_generation test_pop

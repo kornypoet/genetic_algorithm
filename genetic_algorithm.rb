@@ -16,7 +16,6 @@ class GeneticAlgorithm
     @cross_rate    = options['cross_rate']
     @mutate_rate   = options['mutate_rate']
     @chromosomes   = populate @pop_size, @chrome_length
-    @total_fitness = total_fitness
     @generation    = 1
   end
 
@@ -44,12 +43,15 @@ class GeneticAlgorithm
 
   def calculate_fitness actual, target
     fitness = (100.0 / (target - actual)).abs
-    return fitness if fitness == Infinity
+    return Infinity if fitness == Infinity
     fitness >= 100 ? 99.0 : ("%.4f" % fitness).to_f
   end
 
   def update_fitness! target
-    @chromosomes.each { |chrome| chrome.fitness = calculate_fitness(chrome.numeric_value, target) }
+    @chromosomes.each do |chrome|
+      chrome.fitness = calculate_fitness(chrome.numeric_value, target)
+      throw :win_condition if chrome.fitness == Infinity
+    end
   end
 
   def total_fitness
@@ -60,9 +62,9 @@ class GeneticAlgorithm
     total_fitness
   end
 
-  def roulette total_fitness
+  def roulette (fit_level = total_fitness)
     current_fitness = 0.0
-    slice = rand(total_fitness.ceil)
+    slice = rand(fit_level.ceil)
     @chromosomes.each do |chrome|
       current_fitness += chrome.fitness
       return chrome if current_fitness >= slice
@@ -70,7 +72,7 @@ class GeneticAlgorithm
   end
 
   def decide? rate
-    rand < rate
+    rand < rate.to_f
   end
 
   def new_generation population
@@ -78,12 +80,37 @@ class GeneticAlgorithm
     @generation += 1
   end
 
-  def simulate!
+  def create_children parent_one, parent_two
+    if decide? @cross_rate
+      offspring_one, offspring_two = cross(parent_one.bit_value, parent_two.bit_value)
+    else
+      decide? @mutate_rate ? offspring_one = mutate(parent_one.bit_value) : offspring_one = parent_one.bit_value
+      decide? @mutate_rate ? offspring_two = mutate(parent_two.bit_value) : offspring_two = parent_two.bit_value
+    end
+    return [offspring_one, offspring_two]
+  end
 
+  def simulate!
+    catch :win_condition do
+      while true do
+        update_fitness! @target
+        puts "Total fitness: #{total_fitness}"
+        new_pop = []
+        (@pop_size / 2).times do
+          child_one, child_two = create_children(roulette, roulette)
+          new_pop << Chromosome.new(child_one) << Chromosome.new(child_two)
+        end
+        new_generation new_pop
+      end
+    end
+    puts state
   end
 
   def state
-    "Current Population: #{@pop_size}\nTotal Fitness: #{@total_fitness}\nCross Rate: #{@cross_rate}\nMutation Rate: #{@mutate_rate}\nCurrent Generation: #{@generation}"
+    "Current Population: #{@pop_size}\nTotal Fitness: #{total_fitness}\nCross Rate: #{@cross_rate}\nMutation Rate: #{@mutate_rate}\nCurrent Generation: #{@generation}"
   end
+
 end
 
+ga = GeneticAlgorithm.new({ 'chrome_length' => 100, 'target' => 45.0, 'pop_size' => 100, 'cross_rate' => 0.7, 'mutate_rate' => 0.1 })
+ga.simulate!
