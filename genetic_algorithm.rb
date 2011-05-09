@@ -1,8 +1,11 @@
+require 'rubygems'
 require 'chromosome'
+require 'json'
 
 class GeneticAlgorithm
 
-  attr_reader :chrome_length, :target, :pop_size, :chromosomes, :cross_rate, :mutate_rate, :generation
+  attr_reader :chrome_length, :target, :pop_size, :chromosomes, :cross_rate, :mutate_rate,
+              :generation, :cross_amt, :mutate_amt
 
   Infinity = 1.0 / 0
 
@@ -15,6 +18,8 @@ class GeneticAlgorithm
     @chrome_length = options['chrome_length']
     @cross_rate    = options['cross_rate']
     @mutate_rate   = options['mutate_rate']
+    @cross_amt     = 0
+    @mutate_amt    = 0
     @chromosomes   = populate @pop_size, @chrome_length
     @generation    = 1
   end
@@ -30,10 +35,12 @@ class GeneticAlgorithm
   end
 
   def mutate bin_string
+    @mutate_amt += 1
     bin_string = bin_string.gsub(/1/,'a').gsub(/0/,'1').gsub(/a/,'0')
   end
 
   def cross(x_chrome, y_chrome)
+    @cross_amt += 1
     cross_spot = rand x_chrome.size
     return [y_chrome, x_chrome] if cross_spot == 0
     crossed_y = y_chrome.slice(0..cross_spot-1) + x_chrome.slice(cross_spot..-1)
@@ -94,7 +101,6 @@ class GeneticAlgorithm
     catch :win_condition do
       while true do
         update_fitness! @target
-        puts "Total fitness: #{total_fitness}"
         new_pop = []
         (@pop_size / 2).times do
           child_one, child_two = create_children(roulette, roulette)
@@ -103,14 +109,20 @@ class GeneticAlgorithm
         new_generation new_pop
       end
     end
-    puts state
   end
 
-  def state
-    "Current Population: #{@pop_size}\nTotal Fitness: #{total_fitness}\nCross Rate: #{@cross_rate}\nMutation Rate: #{@mutate_rate}\nCurrent Generation: #{@generation}"
+  def stats &block
+    stats = {
+      :pop_size      => @pop_size,
+      :total_fitness => @total_fitness,
+      :cross_rate    => @cross_rate,
+      :mutate_rate   => @mutate_rate,
+      :current_gen   => @generation,
+      :mutate_amt    => @mutate_amt,
+      :cross_amt     => @cross_amt
+    }
+    yield stats
   end
 
 end
 
-ga = GeneticAlgorithm.new({ 'chrome_length' => 100, 'target' => 45.0, 'pop_size' => 100, 'cross_rate' => 0.7, 'mutate_rate' => 0.1 })
-ga.simulate!
