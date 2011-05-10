@@ -109,6 +109,7 @@ class GeneticAlgorithm
         new_generation new_pop
       end
     end
+    @chromosomes.each { |c| puts c.string_value if c.fitness == Infinity}
   end
 
   def stats &block
